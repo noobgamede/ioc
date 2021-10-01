@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,12 +24,7 @@ namespace IOC.IoC
 
         public GameObject Build(string type)
         {
-            DesignByContract.Check.Require(prefabs.ContainsKey(type),"IGameObjectFactory - Invalid Prefab Type");
-
-            GameObject go = Build(prefabs[type][0]);
-
-            Vector3 scale = go.transform.localScale;
-            Quaternion rotation = 
+            throw new NotImplementedException();
         }
 
         public GameObject Build(GameObject go)

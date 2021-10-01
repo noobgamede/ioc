@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 namespace IOC.IoC
 {
@@ -9,7 +9,7 @@ namespace IOC.IoC
         {
             _container = container; 
         }
-        public M Build<M>(Func<M> constructor) where M : Monobehaviour
+        public M Build<M>(Func<M> constructor) where M : MonoBehaviour
         {
             M mb = (M)constructor();
             _container.Inject(mb);
