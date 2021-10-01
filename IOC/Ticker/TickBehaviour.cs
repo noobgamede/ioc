@@ -37,6 +37,24 @@ namespace IOC.Ticker
         {
             _lateTicked.Remove(tickable);
         }
+
+        private void Update()
+        {
+            for (int i = 0; i < _ticked.Count; ++i)
+                _ticked[i].Tick(Time.deltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            for (int i = 0; i < _lateTicked.Count; ++i)
+                _lateTicked[i].LateTick(Time.deltaTime);
+        }
+
+        private void FixedUpdate()
+        {
+            for (int i = 0; i < _physicallyTicked.Count; ++i)
+                _physicallyTicked[i].PhysicsTick(Time.fixedDeltaTime);
+        }
     }
 
 }
