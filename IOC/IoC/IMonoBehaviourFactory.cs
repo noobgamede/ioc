@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 namespace IOC.IoC
 {
-    public interface IMonobehaviourFactory
+    public interface IMonoBehaviourFactory
     {
         M Build<M>(Func<M> constructor) where M : MonoBehaviour;
     }

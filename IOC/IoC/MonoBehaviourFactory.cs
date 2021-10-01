@@ -2,10 +2,10 @@ using UnityEngine;
 using System;
 namespace IOC.IoC
 {
-    public class MonobehaviourFactory : IMonobehaviourFactory
+    public class MonoBehaviourFactory : IMonoBehaviourFactory
     {
         IContainer _container;
-        public MonobehaviourFactory(IContainer container)
+        public MonoBehaviourFactory(IContainer container)
         {
             _container = container; 
         }
