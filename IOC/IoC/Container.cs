@@ -34,7 +34,7 @@ namespace IOC.IoC
         {
             Type contract = typeof(TContractor);
             TContractor instance = Get(contract) as TContractor;
-            //DesignByContract.Check.Ensure(instance!=null,"IoC.Container instance failed to be built (contractor not found - must be registered)");
+            DesignByContract.Check.Ensure(instance!=null,"IoC.Container instance failed to be built (contractor not found - must be registered)");
             return instance;
         }
 
@@ -101,7 +101,7 @@ namespace IOC.IoC
 
         void InternalInject(object injectable)
         {
-            //DesignByContract.Check.Require(injectable!=null);
+            DesignByContract.Check.Require(injectable!=null);
             Type contract = injectable.GetType();
             Type injectAttributeType = typeof(InjectAttribute);
 
