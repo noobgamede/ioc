@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-namespace IOC.IoC
+namespace IOC.Factories
 {
     public interface IMonoBehaviourFactory
     {

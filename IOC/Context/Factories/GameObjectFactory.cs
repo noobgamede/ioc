@@ -1,20 +1,19 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace IOC.IoC
+namespace IOC.Context
 {
-    public class GameObjectFactory:IGameObjectFactory
+    public class GameObjectFactory:Factories.IGameObjectFactory
     {
-        IContainer _container;
+        IUnityContextHierarchyChangedListener _unityContext;
         Dictionary<string, GameObject[]> prefabs;
-        public GameObjectFactory(IContainer container)
+        public GameObjectFactory(IUnityContextHierarchyChangedListener root)
         {
-            _container = container;
+            _unityContext = root;
             prefabs = new Dictionary<string, GameObject[]>();
         }
 
-        public void AddPrefab(GameObject prefab, string type, GameObject parent)
+        public void RegisterPrefab(GameObject prefab, string type, GameObject parent)
         {
             GameObject[] objects = new GameObject[2];
             objects[0] = prefab;
@@ -44,12 +43,17 @@ namespace IOC.IoC
 
         public GameObject Build(GameObject go)
         {
-            GameObject copy = GameObject.Instantiate(go) as GameObject;
+            GameObject copy = Object.Instantiate(go) as GameObject;
             MonoBehaviour[] components = copy.GetComponentsInChildren<MonoBehaviour>(true);
             for(int i=0;i<components.Length;++i)
             {
-                _container.Inject(components[i]); 
+                if(components[i]!=null)
+                _unityContext.OnMonobehaviourAdded(components[i]); 
             }
+            _unityContext.OnGameObjectAdded(copy);
+
+            copy.AddComponent<NotifyComponentsRemoved>().unityContext = _unityContext;
+            copy.AddComponent<NotifyEntityRemoved>().unityContext = _unityContext;
             return copy;
         }
     }

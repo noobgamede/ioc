@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-namespace IOC.IoC
+namespace IOC.Factories
 {
     public interface IGameObjectFactory
     {
-        void AddPrefab(GameObject prefab,string type,GameObject parent);
+        void RegisterPrefab(GameObject prefab,string type,GameObject parent = null);
         GameObject Build(string type);
         GameObject Build(GameObject go);
     }
