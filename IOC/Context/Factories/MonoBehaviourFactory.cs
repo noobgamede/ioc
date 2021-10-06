@@ -11,7 +11,7 @@ namespace IOC.Context
         }
         public M Build<M>(Func<M> constructor) where M : MonoBehaviour
         {
-            M mb = (M)constructor();
+            M mb = constructor();
             _unityContext.OnMonobehaviourAdded(mb);
 
             GameObject go = mb.gameObject;

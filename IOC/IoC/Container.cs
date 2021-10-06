@@ -17,16 +17,15 @@ namespace IOC.IoC
             _cachedProperties = new Dictionary<Type, MemberInfo[]>(); 
         }
 
-        virtual public IBinder<TContractor> Bind<TContractor>() where TContractor : class
+        public IBinder<TContractor> Bind<TContractor>() where TContractor : class
         {
-            Binder<TContractor> binder = new Binder<TContractor>();
-            binder.Bind(this);
+            IBinder<TContractor> binder = InternalBind<TContractor>();
             return binder;
         }
 
         public void BindSelf<TContractor>() where TContractor : class, new()
         {
-            IBinder<TContractor> binder = Bind<TContractor>();
+            IBinder<TContractor> binder = InternalBind<TContractor>();
             binder.AsSingle<TContractor>();
         }
 
@@ -96,6 +95,7 @@ namespace IOC.IoC
             object obj = provider.Create(containerContract);
             if (provider.Single) _uniqueInstances[provider.Contract] = obj;
             InternalInject(obj);
+            OnInstanceGenerated(obj);
             return obj; 
         }
 
@@ -118,8 +118,16 @@ namespace IOC.IoC
             {
                 InjectProperty(injectable,properties[i]as PropertyInfo,contract); 
             }
-            if (injectable is IInitialize)
-                (injectable as IInitialize).OnDependencyInjected();
+
+            try 
+            {
+                if (injectable is IInitialize)
+                    (injectable as IInitialize).OnDependencyInjected();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("OnDependenciesInjected Crash", e); 
+            }
         }
 
         static bool DelegateToSearchCriteria(MemberInfo objMemberInfo,Object objSearch)
@@ -138,15 +146,31 @@ namespace IOC.IoC
             }
         }
 
+        virtual protected IBinder<TContractor>BinderProvider<TContractor>() where TContractor:class
+        {
+            return new Binder<TContractor>(); 
+        }
+
+        virtual protected void OnInstanceGenerated<TContractor>(TContractor instance) where TContractor:class
+        { 
+        }
+
+        IBinder<TContractor> InternalBind<TContractor>() where TContractor:class
+        {
+            IBinder<TContractor> binder = BinderProvider<TContractor>();
+            binder.Bind<TContractor>(this);
+            return binder;
+        }
+
         private sealed class Binder<Contractor> : IBinder<Contractor> where Contractor : class
         {
             IInternalContainer _container;
             Type _interfaceType;
 
-            public void Bind(IInternalContainer container)
+            public void Bind<ToBind>(IInternalContainer container) where ToBind:class
             {
                 _container = container;
-                _interfaceType = typeof(Contractor);
+                _interfaceType = typeof(ToBind);
             }
 
             public void AsSingle<T>() where T : Contractor, new()
