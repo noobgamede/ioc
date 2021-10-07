@@ -1,18 +1,25 @@
 ﻿using System;
 namespace IOC.Ticker
 {
-    public interface ITickable
+    public interface ITickableBase { }
+
+    public interface ITickable:ITickableBase
     {
         void Tick(float deltaSec);
     }
 
-    public interface ILateTickable
+    public interface ILateTickable: ITickableBase
     {
         void LateTick(float deltaSec); 
     }
 
-    public interface IPhysicallyTickable
+    public interface IPhysicallyTickable: ITickableBase
     {
         void PhysicsTick(float deltaTick); 
+    }
+
+    public interface IIntervaledTickable:ITickableBase
+    {
+        void IntervaledTick(); 
     }
 }

@@ -16,34 +16,28 @@ namespace IOC.Ticker
             }
         }
 
-        public void Add(ITickable tickable)
+        public void Add(ITickableBase tickable)
         {
-            _ticker.Add(tickable);
+            if (tickable is ITickable)
+                _ticker.Add(tickable as ITickable);
+            if (tickable is IPhysicallyTickable)
+                _ticker.AddPhysical(tickable as IPhysicallyTickable);
+            if (tickable is ILateTickable)
+                _ticker.AddLate(tickable as ILateTickable);
+            if (tickable is IIntervaledTickable)
+                _ticker.AddIntervaled(tickable as IIntervaledTickable);
         }
 
-        public void AddLate(ILateTickable tickable)
+        public void Remove(ITickableBase tickable)
         {
-            _ticker.AddLate(tickable);
-        }
-
-        public void AddPhysical(IPhysicallyTickable tickable)
-        {
-            _ticker.AddPhysical(tickable);
-        }
-
-        public void Remove(ITickable tickable)
-        {
-            _ticker.Remove(tickable);
-        }
-
-        public void RemoveLate(ILateTickable tickable)
-        {
-            _ticker.RemoveLate(tickable);
-        }
-
-        public void RemovePhysical(IPhysicallyTickable tickable)
-        {
-            _ticker.RemovePhysical(tickable);
+            if (tickable is ITickable)
+                _ticker.Remove(tickable as ITickable);
+            if (tickable is IPhysicallyTickable)
+                _ticker.RemovePhysical(tickable as IPhysicallyTickable);
+            if (tickable is ILateTickable)
+                _ticker.RemoveLate(tickable as ILateTickable);
+            if (tickable is IIntervaledTickable)
+                _ticker.RemoveIntervaled(tickable as IIntervaledTickable);
         }
     }
 }
