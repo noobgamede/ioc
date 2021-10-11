@@ -5,7 +5,6 @@ namespace IOC.Command
     sealed public class CommandFactory : ICommandFactory
     {
         Action<ICommand> _onNewCommand;
-        CommandPool _commandPool = new CommandPool();
         public CommandFactory()
         { 
         }
@@ -18,16 +17,14 @@ namespace IOC.Command
         public TCommand Build<TCommand>() where TCommand : ICommand, new()
         {
             TCommand command = new TCommand();
-            _commandPool.AddCommand(command);
             OnNewCommand(command);
             return command;
         }
 
-        public TCommand Build<TCommand>(params object[] args) where TCommand : ICommand
+        public TCommand Build<TCommand,T>(T dependency) where TCommand : ICommand,new()
         {
             Type commandClass = typeof(TCommand);
-            TCommand command = (TCommand)Activator.CreateInstance(commandClass,args);
-            _commandPool.AddCommand(command);
+            TCommand command = (TCommand)Activator.CreateInstance(commandClass,dependency);
             OnNewCommand(command);
             return command;
         }
@@ -35,32 +32,6 @@ namespace IOC.Command
         void OnNewCommand(ICommand command)
         {
             if (_onNewCommand != null) _onNewCommand(command); 
-        }
-
-        private class CommandPool
-        {
-            Dictionary<Type, ICommand> _command = new Dictionary<Type, ICommand>();
-             
-            public TCommand GetCommand<TCommand>(out bool commandIsNew) where TCommand:ICommand,new()
-            {
-                Type type = typeof(TCommand);
-                ICommand command = null;
-                if(_command.TryGetValue(type,out command))
-                {
-                    commandIsNew = false;
-                    return (TCommand)command; 
-                }
-                command = new TCommand();
-                _command[type] = command;
-                commandIsNew = true;
-                return (TCommand)command;
-            }
-
-            public void AddCommand<TCommand>(TCommand command) where TCommand:ICommand
-            {
-                Type type = typeof(TCommand);
-                _command[type] = command;
-            }
         }
     }
 }

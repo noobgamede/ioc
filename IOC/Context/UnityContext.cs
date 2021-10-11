@@ -22,7 +22,7 @@ public class UnityContext<T> : UnityContext where T:class,ICompositionRoot,IUnit
         for(int i=0;i<behaviours.Length;++i)
         {
             if(behaviours[i]!=null)
-            _applicationRoot.OnMonobehaviourAdded(behaviours[i]); 
+                _applicationRoot.OnMonobehaviourAdded(behaviours[i]); 
         }
         Transform[] children = transform.GetComponentsInChildren<Transform>(true);
 

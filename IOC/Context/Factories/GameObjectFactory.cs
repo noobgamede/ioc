@@ -13,30 +13,35 @@ namespace IOC.Context
             prefabs = new Dictionary<string, GameObject[]>();
         }
 
-        public void RegisterPrefab(GameObject prefab, string type, GameObject parent)
+        public void RegisterPrefab(GameObject prefab, string prefabName, GameObject parent)
         {
             GameObject[] objects = new GameObject[2];
             objects[0] = prefab;
             objects[1] = parent;
-            prefabs.Add(type, objects);
+            prefabs.Add(prefabName, objects);
         }
 
-        public GameObject Build(string type)
+        public GameObject Build(string prefabName)
         {
-            //DesignerByContract.Check.Require(prefabs.ContainsKey(type),"IGameObjectFactory - Invalid Prefab Type");
-            GameObject go = Build(prefabs[type][0]);
+            DesignByContract.Check.Require(prefabs.ContainsKey(prefabName),"IGameObjectFactory - Invalid Prefab Type");
+            GameObject go = Build(prefabs[prefabName][0]);
 
-            Vector3 scale = go.transform.localScale;
-            Quaternion rotation = go.transform.localRotation;
-            Vector3 position = go.transform.localPosition;
+            GameObject parent = prefabs[prefabName][1];
+            if(parent!=null)
+            {
+                Vector3 scale = go.transform.localScale;
+                Quaternion rotation = go.transform.localRotation;
+                Vector3 position = go.transform.localPosition;
 
-            prefabs[type][1].transform.gameObject.SetActive(true);
+                parent.SetActive(true);
 
-            go.transform.parent = prefabs[type][1].transform;
+                go.transform.parent = parent.transform;
 
-            go.transform.localPosition = position;
-            go.transform.localRotation = rotation;
-            go.transform.localScale = scale;
+                go.transform.localPosition = position;
+                go.transform.localRotation = rotation;
+                go.transform.localScale = scale;
+            }
+
 
             return go;
         }
@@ -48,7 +53,7 @@ namespace IOC.Context
             for(int i=0;i<components.Length;++i)
             {
                 if(components[i]!=null)
-                _unityContext.OnMonobehaviourAdded(components[i]); 
+                    _unityContext.OnMonobehaviourAdded(components[i]); 
             }
             _unityContext.OnGameObjectAdded(copy);
 

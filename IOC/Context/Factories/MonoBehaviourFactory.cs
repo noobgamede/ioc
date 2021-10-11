@@ -16,7 +16,7 @@ namespace IOC.Context
 
             GameObject go = mb.gameObject;
             if (go.GetComponent<NotifyComponentsRemoved>() == null)
-                go.GetComponent<NotifyComponentsRemoved>().unityContext = _unityContext;
+                go.AddComponent<NotifyComponentsRemoved>().unityContext = _unityContext;
             return mb;
         }
     }

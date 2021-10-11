@@ -1,15 +1,13 @@
 ﻿using System;
 namespace IOC.Command
 {
-    public interface IInjectableCommand:ICommand
+    public interface IInjectableCommand<T>:ICommand
     {
-        ICommand Inject(object dependency);
+        ICommand Inject(T dependency);
     }
 
-    public interface IInjectableCommand<T> : IInjectableCommand { }
-
-    public interface IMultiInjectableCommand:ICommand
+    public interface IInjectableCommandWithStruct<T> : ICommand where T:struct 
     {
-        ICommand Inject(params object[] dependencies); 
+        ICommand Inject(ref T dependency); 
     }
 }

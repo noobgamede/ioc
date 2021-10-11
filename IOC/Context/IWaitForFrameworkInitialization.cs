@@ -1,7 +1,7 @@
 ﻿using System;
 namespace IOC.Context
 {
-    public interface IWaitForFrameInitialization
+    public interface IWaitForFrameworkInitialization
     {
         void OnFrameworkInitialized();
     }

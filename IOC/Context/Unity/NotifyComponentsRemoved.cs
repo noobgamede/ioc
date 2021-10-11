@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 namespace IOC.Context
 {
     public class NotifyComponentsRemoved : MonoBehaviour

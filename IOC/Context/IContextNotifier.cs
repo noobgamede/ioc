@@ -6,7 +6,7 @@ namespace IOC.Context
         void NotifyFrameworkInitialized();
         void NotifyFrameworkDeinitialized();
 
-        void AddFrameworkInitializationListener(IWaitForFrameInitialization obj);
-        void AddFrameworkDestructionListener(IWaitForFrameDestruction obj);
+        void AddFrameworkInitializationListener(IWaitForFrameworkInitialization obj);
+        void AddFrameworkDestructionListener(IWaitForFrameworkDestruction obj);
     }
 }

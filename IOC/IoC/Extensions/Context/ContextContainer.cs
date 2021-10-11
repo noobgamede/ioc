@@ -13,11 +13,11 @@ namespace IOC.IoC
 
         protected override void OnInstanceGenerated<TContractor>(TContractor instance)
         {
-            if (instance is IWaitForFrameInitialization)
-                _contextNotifier.AddFrameworkInitializationListener(instance as IWaitForFrameInitialization);
+            if (instance is IWaitForFrameworkInitialization)
+                _contextNotifier.AddFrameworkInitializationListener(instance as IWaitForFrameworkInitialization);
 
-            if (instance is IWaitForFrameDestruction)
-                _contextNotifier.AddFrameworkDestructionListener(instance as IWaitForFrameDestruction);
+            if (instance is IWaitForFrameworkDestruction)
+                _contextNotifier.AddFrameworkDestructionListener(instance as IWaitForFrameworkDestruction);
         }
     }
 }

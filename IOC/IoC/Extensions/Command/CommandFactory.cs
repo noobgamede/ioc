@@ -16,10 +16,5 @@ namespace IOC.IoC
         {
             return _commandFactory.Build<TCommand>();
         }
-
-        public TCommand Build<TCommand>(params object[] args) where TCommand : ICommand
-        {
-            return _commandFactory.Build<TCommand>(args);
-        }
     }
 }

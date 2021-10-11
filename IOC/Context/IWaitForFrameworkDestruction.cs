@@ -1,7 +1,7 @@
 ﻿using System;
 namespace IOC.Context
 {
-    public interface IWaitForFrameDestruction
+    public interface IWaitForFrameworkDestruction
     {
         void OnFrameworkDestroyed();
     }
