@@ -1,15 +1,24 @@
 ﻿using System;
+using System.Reflection;
+
 namespace IOC.IoC
 {
-    public class MultiProvider<T> : IProvider<T> where T : new()
+    class MultiProvider<T> : IProvider<T> where T : new()
     {
-        public Type Contract => typeof(T);
+        Type _type;
 
-        public bool Single => false;
-
-        public object Create(Type containerContract)
+        public MultiProvider()
         {
-            return new T();
+            _type = typeof(T); 
+        }
+
+        public Type Contract => _type;
+
+
+        public bool Create(Type containerContract,PropertyInfo info,out object instance)
+        {
+            instance = new T();
+            return true;
         }
     }
 }

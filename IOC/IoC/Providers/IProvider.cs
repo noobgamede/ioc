@@ -1,12 +1,11 @@
 ﻿using System;
-
+using System.Reflection;
 namespace IOC.IoC
 {
     public interface IProvider
     {
-        object Create(Type containerContract);
+        bool Create(Type containerContract,PropertyInfo info,out object instance);
         Type Contract { get; }
-        bool Single { get; }
     }
 
     public interface IProvider<T> : IProvider { }

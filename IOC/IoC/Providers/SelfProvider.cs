@@ -1,21 +1,30 @@
 ﻿using System;
+using System.Reflection;
 namespace IOC.IoC
 {
-    public class SelfProvider<T> : IProvider<T>
+    class SelfProvider<T> : IProvider<T>
     {
         T _instance;
+        bool _mustBeInjected = true;
+        Type _type;
+
         public Type Contract => typeof(T);
 
-        public bool Single => true;
-
-        public object Create(Type containerContract)
+        public bool Create(Type containerContract,PropertyInfo info,out object instance)
         {
-            return _instance;
+            instance = _instance;
+            if(_mustBeInjected == true)
+            {
+                _mustBeInjected = false;
+                return true;
+            }
+            return false;
         }
 
         public SelfProvider(T instance)
         {
             _instance = instance;
+            _type = typeof(T);
         }
     }
 }

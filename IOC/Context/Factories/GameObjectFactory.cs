@@ -5,15 +5,14 @@ namespace IOC.Context
 {
     public class GameObjectFactory:Factories.IGameObjectFactory
     {
-        IUnityContextHierarchyChangedListener _unityContext;
         Dictionary<string, GameObject[]> prefabs;
-        public GameObjectFactory(IUnityContextHierarchyChangedListener root)
+
+        public GameObjectFactory()
         {
-            _unityContext = root;
             prefabs = new Dictionary<string, GameObject[]>();
         }
 
-        public void RegisterPrefab(GameObject prefab, string prefabName, GameObject parent)
+        public void RegisterPrefab(GameObject prefab, string prefabName, GameObject parent=null)
         {
             GameObject[] objects = new GameObject[2];
             objects[0] = prefab;
@@ -23,7 +22,7 @@ namespace IOC.Context
 
         public GameObject Build(string prefabName)
         {
-            DesignByContract.Check.Require(prefabs.ContainsKey(prefabName),"IGameObjectFactory - Invalid Prefab Type");
+            DesignByContract.Check.Require(prefabs.ContainsKey(prefabName),"IGameObjectFactory - prefab was not found: "+prefabName);
             GameObject go = Build(prefabs[prefabName][0]);
 
             GameObject parent = prefabs[prefabName][1];
@@ -41,24 +40,12 @@ namespace IOC.Context
                 go.transform.localRotation = rotation;
                 go.transform.localScale = scale;
             }
-
-
             return go;
         }
 
-        public GameObject Build(GameObject go)
+        virtual public GameObject Build(GameObject go)
         {
             GameObject copy = Object.Instantiate(go) as GameObject;
-            MonoBehaviour[] components = copy.GetComponentsInChildren<MonoBehaviour>(true);
-            for(int i=0;i<components.Length;++i)
-            {
-                if(components[i]!=null)
-                    _unityContext.OnMonobehaviourAdded(components[i]); 
-            }
-            _unityContext.OnGameObjectAdded(copy);
-
-            copy.AddComponent<NotifyComponentsRemoved>().unityContext = _unityContext;
-            copy.AddComponent<NotifyEntityRemoved>().unityContext = _unityContext;
             return copy;
         }
     }

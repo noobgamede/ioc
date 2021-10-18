@@ -1,5 +1,4 @@
-﻿using System;
-namespace IOC.Command
+﻿namespace IOC.Command
 {
     public interface IInjectableCommand<T>:ICommand
     {

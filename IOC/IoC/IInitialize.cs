@@ -1,8 +1,7 @@
-﻿using System;
-namespace IOC.IoC
+﻿namespace IOC.IoC
 {
-    internal interface IInitialize
+    interface IInitialize
     {
-        void OnDependencyInjected();
+        void OnDependenciesInjected();
     }
 }

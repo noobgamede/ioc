@@ -17,7 +17,7 @@ namespace IOC.Command
         public TCommand Build<TCommand>() where TCommand : ICommand, new()
         {
             TCommand command = new TCommand();
-            OnNewCommand(command);
+            _onNewCommand?.Invoke(command);
             return command;
         }
 
@@ -25,13 +25,10 @@ namespace IOC.Command
         {
             Type commandClass = typeof(TCommand);
             TCommand command = (TCommand)Activator.CreateInstance(commandClass,dependency);
-            OnNewCommand(command);
+            _onNewCommand?.Invoke(command);
             return command;
         }
 
-        void OnNewCommand(ICommand command)
-        {
-            if (_onNewCommand != null) _onNewCommand(command); 
-        }
+
     }
 }

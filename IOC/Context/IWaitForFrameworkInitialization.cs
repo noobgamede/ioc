@@ -1,5 +1,4 @@
-﻿using System;
-namespace IOC.Context
+﻿namespace IOC.Context
 {
     public interface IWaitForFrameworkInitialization
     {

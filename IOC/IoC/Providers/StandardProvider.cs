@@ -1,15 +1,30 @@
 ﻿using System;
+using System.Reflection;
+
 namespace IOC.IoC
 {
-    public class StandardProvider<T> : IProvider<T> where T : new()
+    class StandardProvider<T> : IProvider<T> where T : new()
     {
-        public Type Contract => typeof(T);
+        T _object;
+        Type _type;
 
-        public bool Single => true;
-
-        public object Create(Type containerContract)
+        public StandardProvider()
         {
-            return new T();
+            _type = typeof(T); 
+        }
+
+        public Type Contract => _type;
+
+        public bool Create(Type containerContract,PropertyInfo info,out object instance)
+        {
+            bool mustInject = false;
+            if(_object==null)
+            {
+                _object = new T();
+                mustInject = true; 
+            }
+            instance = _object;
+            return mustInject;
         }
     }
 }

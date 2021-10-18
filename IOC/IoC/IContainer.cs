@@ -1,5 +1,4 @@
-﻿using System;
-namespace IOC.IoC
+﻿namespace IOC.IoC
 {
     public interface IContainer
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace IOC.Command
 {
-    internal interface ICommandFactory
+    interface ICommandFactory
     {
         TCommand Build<TCommand>() where TCommand : ICommand, new();
     }

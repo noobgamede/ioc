@@ -2,43 +2,27 @@
 using IOC.Context;
 using UnityEngine;
 
-public class UnityContext : MonoBehaviour
+public abstract class UnityContext : MonoBehaviour
 {
+    protected abstract void OnAwake();
+
+    private void Awake()
+    {
+        OnAwake();
+    }
 }
 
-public class UnityContext<T> : UnityContext where T:class,ICompositionRoot,IUnityContextHierarchyChangedListener,new() 
+public class UnityContext<T> : UnityContext where T:class,ICompositionRoot,new() 
 {
     T _applicationRoot;
 
-    virtual protected void Awake()
-    {
-        Init();
-    }
-
-    void Init()
+    protected override void OnAwake()
     {
         _applicationRoot = new T();
-        MonoBehaviour[] behaviours = transform.GetComponentsInChildren<MonoBehaviour>(true);
-        for(int i=0;i<behaviours.Length;++i)
-        {
-            if(behaviours[i]!=null)
-                _applicationRoot.OnMonobehaviourAdded(behaviours[i]); 
-        }
-        Transform[] children = transform.GetComponentsInChildren<Transform>(true);
-
-        for(int i=0;i<children.Length;++i)
-        {
-            if (children[i] != null)
-                _applicationRoot.OnGameObjectAdded(children[i].gameObject); 
-        }
+        _applicationRoot.OnContextCreated(this);
     }
 
     private void OnDestroy()
-    {
-        FrameworkDestroyed();
-    }
-
-    private void FrameworkDestroyed()
     {
         _applicationRoot.OnContextDestroyed();
     }

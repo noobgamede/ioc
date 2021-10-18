@@ -4,7 +4,7 @@ using WeakReferenceI = IOC.DataStructures.WeakReference<IOC.Context.IWaitForFram
 using WeakReferenceD = IOC.DataStructures.WeakReference<IOC.Context.IWaitForFrameworkDestruction>;
 namespace IOC.Context
 {
-    public class ContextNotifier : IContextNotifier
+    class ContextNotifier : IContextNotifier
     {
         List<WeakReferenceI> toInitialize;
         List<WeakReferenceD> toDeinitialize;
@@ -32,20 +32,30 @@ namespace IOC.Context
         public void NotifyFrameworkDeinitialized()
         {
             for (int i = toDeinitialize.Count - 1; i >= 0; --i)
-            {
-                var obj = toDeinitialize[i];
-                if (obj.IsAlive) (obj.Target as IWaitForFrameworkDestruction).OnFrameworkDestroyed();
-            }
+                try
+                {
+                    var obj = toDeinitialize[i];
+                    if (obj.IsAlive) obj.Target.OnFrameworkDestroyed();
+                }
+                catch(Exception e)
+                {
+                    Utility.Console.LogException(e);
+                }
             toDeinitialize = null;
         }
 
         public void NotifyFrameworkInitialized()
         {
             for(int i=toInitialize.Count-1;i>=0;--i)
-            {
-                var obj = toInitialize[i];
-                if (obj.IsAlive) (obj.Target as IWaitForFrameworkInitialization).OnFrameworkInitialized();
-            }
+                try
+                {
+                    var obj = toInitialize[i];
+                    if (obj.IsAlive) obj.Target.OnFrameworkInitialized();
+                }
+                catch (Exception e) 
+                {
+                    Utility.Console.LogException(e);
+                }
             toInitialize = null;
         }
     }
